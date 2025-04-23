@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Canon : MonoBehaviour
 {
-    
+    public static bool bloqueado;
+
+    public AudioClip clipDisparo;
+    private GameObject sonidoDisparo;
+    private AudioSource SourceDisparo;
 
     [SerializeField] private GameObject BalaPrefab;
     private GameObject puntaCanon;
+    public GameObject ParticulasDisparo;
     private GameObject adminJuego;
     private float rotacion;
     private int disparos;
@@ -17,6 +22,9 @@ public class Canon : MonoBehaviour
     private void Start()
     {
         puntaCanon = transform.Find("PuntaCanon").gameObject;
+
+        sonidoDisparo = GameObject.Find("SonidoDisparo");
+        SourceDisparo = sonidoDisparo.GetComponent<AudioSource>();
 
         admin = AdministradorJuego.ObtenerInstancia();
 
@@ -51,14 +59,20 @@ public class Canon : MonoBehaviour
 
         if (disparos > 0)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space)&& !bloqueado)
             {
                 GameObject temp = Instantiate(BalaPrefab, puntaCanon.transform.position, transform.rotation);
+                //GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, transform.rotation);
                 Rigidbody tempRB = temp.GetComponent<Rigidbody>();
+                SeguirCamara.objetivo = temp;
                 Vector3 direccionDisparo = transform.rotation.eulerAngles;
                 direccionDisparo.y = 90 - direccionDisparo.x;
+                Vector3 direccionParticulas = new Vector3(-90 + direccionDisparo.x, 90, 0);
+                GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, Quaternion.Euler(direccionParticulas), transform);
                 tempRB.linearVelocity = direccionDisparo.normalized * admin.VelocidadBolaPublico;
+                SourceDisparo.Play();
                 disparos--;
+                bloqueado = true;
             }
         }
     }
