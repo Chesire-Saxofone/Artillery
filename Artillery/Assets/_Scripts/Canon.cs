@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;  
 
 public class Canon : MonoBehaviour
 {
     public static bool bloqueado;
 
-    public AudioClip clipDisparo;
+    public AudioClip clipDisparo;   
     private GameObject sonidoDisparo;
     private AudioSource SourceDisparo;
 
@@ -18,6 +19,27 @@ public class Canon : MonoBehaviour
     private int disparos;
     private AdministradorJuego admin;
 
+    public CanonControles canonControles;
+    private InputAction apuntar;
+    private InputAction modificarFuerza;
+    private InputAction disparar;
+
+    private void Awake()
+    {
+        canonControles = new CanonControles();
+    }
+
+    private void OnEnable()
+    {
+        apuntar = canonControles.Canon.Apuntar;
+        apuntar.Enable();
+        modificarFuerza = canonControles.Canon.ModificarFuerza;
+        modificarFuerza.Enable();
+        disparar = canonControles.Canon.Disparar;
+        disparar.Enable();
+        disparar.performed += Disparar;
+
+    }
 
     private void Start()
     {
@@ -42,7 +64,8 @@ public class Canon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rotacion += Input.GetAxis("Horizontal") * admin.VelocidadRotacionPublico;
+
+        rotacion += apuntar.ReadValue<float>() * admin.VelocidadRotacionPublico;
         if (rotacion <= 90 && rotacion >= 0)
         {
             transform.eulerAngles = new Vector3(rotacion, 90.0f, 0.0f);
@@ -57,23 +80,22 @@ public class Canon : MonoBehaviour
             rotacion = 0;
         }
 
-        if (disparos > 0)
-        {
-            if (Input.GetKeyDown(KeyCode.Space)&& !bloqueado)
-            {
-                GameObject temp = Instantiate(BalaPrefab, puntaCanon.transform.position, transform.rotation);
-                //GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, transform.rotation);
-                Rigidbody tempRB = temp.GetComponent<Rigidbody>();
-                SeguirCamara.objetivo = temp;
-                Vector3 direccionDisparo = transform.rotation.eulerAngles;
-                direccionDisparo.y = 90 - direccionDisparo.x;
-                Vector3 direccionParticulas = new Vector3(-90 + direccionDisparo.x, 90, 0);
-                GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, Quaternion.Euler(direccionParticulas), transform);
-                tempRB.linearVelocity = direccionDisparo.normalized * admin.VelocidadBolaPublico;
-                SourceDisparo.Play();
-                disparos--;
-                bloqueado = true;
-            }
-        }
+       
+    }
+
+    private void Disparar(InputAction.CallbackContext context)
+    {
+        GameObject temp = Instantiate(BalaPrefab, puntaCanon.transform.position, transform.rotation);
+        //GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, transform.rotation);
+        Rigidbody tempRB = temp.GetComponent<Rigidbody>();
+        SeguirCamara.objetivo = temp;
+        Vector3 direccionDisparo = transform.rotation.eulerAngles;
+        direccionDisparo.y = 90 - direccionDisparo.x;
+        Vector3 direccionParticulas = new Vector3(-90 + direccionDisparo.x, 90, 0);
+        GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, Quaternion.Euler(direccionParticulas), transform);
+        tempRB.linearVelocity = direccionDisparo.normalized * admin.VelocidadBolaPublico;
+        SourceDisparo.Play();
+        disparos--;
+        bloqueado = true;
     }
 }
