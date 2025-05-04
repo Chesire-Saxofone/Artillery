@@ -8,6 +8,11 @@ public class AdministradorJuego : MonoBehaviour
     private static int VelocidadBola = 30;
     private static int DisparosPorJuego = 10;
     private static float VelocidadRotacion = 1;
+    public Canon contador;
+    public Opciones opciones;
+
+    public GameObject CanvasGanar;
+    public GameObject CanvasPerder;
 
     public int VelocidadBolaPublico
     {
@@ -30,6 +35,7 @@ public class AdministradorJuego : MonoBehaviour
     }
     private void Awake()
     {
+        DisparosPorJuegoPublico = opciones.cantidadBalas;
         if (SingletonAdministradorJuego == null)
             {
             SingletonAdministradorJuego = this;
@@ -38,5 +44,23 @@ public class AdministradorJuego : MonoBehaviour
         {
             Debug.LogError("Ya existe una instancia de AdministradorJuego");
         }
+    }
+
+    private void Update()
+    {
+        if (contador.disparos <= 0 && Canon.bloqueado == false && !CanvasGanar.activeSelf)
+        {
+            PerderJuego();
+        }
+    }
+
+    public void GanarJuego()
+    { 
+        CanvasGanar.SetActive(true);
+        contador.disparos = 0;
+    }
+    public void PerderJuego()
+    {
+        CanvasPerder.SetActive(true);
     }
 }
