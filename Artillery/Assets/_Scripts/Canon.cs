@@ -16,7 +16,7 @@ public class Canon : MonoBehaviour
     public GameObject ParticulasDisparo;
     private GameObject adminJuego;
     private float rotacion;
-    private int disparos;
+    public int disparos;
     private AdministradorJuego admin;
 
     public CanonControles canonControles;
@@ -82,20 +82,23 @@ public class Canon : MonoBehaviour
 
        
     }
-
+    
     private void Disparar(InputAction.CallbackContext context)
     {
-        GameObject temp = Instantiate(BalaPrefab, puntaCanon.transform.position, transform.rotation);
-        //GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, transform.rotation);
-        Rigidbody tempRB = temp.GetComponent<Rigidbody>();
-        SeguirCamara.objetivo = temp;
-        Vector3 direccionDisparo = transform.rotation.eulerAngles;
-        direccionDisparo.y = 90 - direccionDisparo.x;
-        Vector3 direccionParticulas = new Vector3(-90 + direccionDisparo.x, 90, 0);
-        GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, Quaternion.Euler(direccionParticulas), transform);
-        tempRB.linearVelocity = direccionDisparo.normalized * admin.VelocidadBolaPublico;
-        SourceDisparo.Play();
-        disparos--;
-        bloqueado = true;
+        if (disparos > 0 && bloqueado == false)
+        {
+            GameObject temp = Instantiate(BalaPrefab, puntaCanon.transform.position, transform.rotation);
+            //GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, transform.rotation);
+            Rigidbody tempRB = temp.GetComponent<Rigidbody>();
+            SeguirCamara.objetivo = temp;
+            Vector3 direccionDisparo = transform.rotation.eulerAngles;
+            direccionDisparo.y = 90 - direccionDisparo.x;
+            Vector3 direccionParticulas = new Vector3(-90 + direccionDisparo.x, 90, 0);
+            GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, Quaternion.Euler(direccionParticulas), transform);
+            tempRB.linearVelocity = direccionDisparo.normalized * admin.VelocidadBolaPublico;
+            SourceDisparo.Play();
+            disparos--;
+            bloqueado = true;
+        }
     }
 }
