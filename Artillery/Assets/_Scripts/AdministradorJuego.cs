@@ -13,6 +13,7 @@ public class AdministradorJuego : MonoBehaviour
 
     public GameObject CanvasGanar;
     public GameObject CanvasPerder;
+    public GameObject BotonReiniciar;
 
     public int VelocidadBolaPublico
     {
@@ -62,5 +63,6 @@ public class AdministradorJuego : MonoBehaviour
     public void PerderJuego()
     {
         CanvasPerder.SetActive(true);
+        BotonReiniciar.SetActive(true);
     }
 }
