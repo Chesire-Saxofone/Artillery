@@ -140,6 +140,7 @@ MonoBehaviour:
   BalaPrefab: {fileID: 1744846789146394656, guid: 0285fb41b34d0f64d9012519eb2e3a1a, type: 3}
   ParticulasDisparo: {fileID: 5717249070151742355, guid: fe05cdfc95d7d074a81c7e300be78623, type: 3}
   disparos: 0
+  fuerzaSlider: {fileID: 0}
 --- !u!1 &63988631
 GameObject:
   m_ObjectHideFlags: 0

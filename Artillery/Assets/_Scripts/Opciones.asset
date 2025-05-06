@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66dede5a56f341444983ca83af9059a5, type: 3}
   m_Name: Opciones
   m_EditorClassIdentifier: 
-  cantidadBalas: 1
+  cantidadBalas: 10
   NivelDificultad: 2

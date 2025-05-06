@@ -111,12 +111,12 @@ public partial class @CanonControles: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""ModificarFuerza"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""13b1de75-6a5a-4d0b-bca0-a58ff24b18c7"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Move"",
@@ -233,7 +233,7 @@ public partial class @CanonControles: IInputActionCollection2, IDisposable
                     ""id"": ""5f9b7286-0b21-472d-919e-8844bab86c28"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""Scale"",
                     ""groups"": """",
                     ""action"": ""ModificarFuerza"",
                     ""isComposite"": false,
@@ -244,7 +244,7 @@ public partial class @CanonControles: IInputActionCollection2, IDisposable
                     ""id"": ""99411124-b2d8-4823-89f2-884ca0ab3a56"",
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""Scale(factor=-1)"",
                     ""groups"": """",
                     ""action"": ""ModificarFuerza"",
                     ""isComposite"": false,

@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;  
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Canon : MonoBehaviour
 {
     public static bool bloqueado;
+
+    public Slider slider;
+    public float speed = 1f;
 
     public AudioClip clipDisparo;   
     private GameObject sonidoDisparo;
@@ -23,6 +27,7 @@ public class Canon : MonoBehaviour
     private InputAction apuntar;
     private InputAction modificarFuerza;
     private InputAction disparar;
+    public Slider fuerzaSlider;
 
     private void Awake()
     {
@@ -39,6 +44,14 @@ public class Canon : MonoBehaviour
         disparar.Enable();
         disparar.performed += Disparar;
 
+    }
+
+    private void OnDisable()
+    {
+        apuntar.Disable();
+        modificarFuerza.Disable();
+        disparar.Disable();
+        disparar.performed -= Disparar;
     }
 
     private void Start()
@@ -64,6 +77,12 @@ public class Canon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        float input = modificarFuerza.ReadValue<float>();
+        if (Mathf.Abs(input) > 0.01f)
+        {
+            slider.value += input * speed * Time.deltaTime;
+        }
 
         rotacion += apuntar.ReadValue<float>() * admin.VelocidadRotacionPublico;
         if (rotacion <= 90 && rotacion >= 0)
@@ -93,9 +112,14 @@ public class Canon : MonoBehaviour
             SeguirCamara.objetivo = temp;
             Vector3 direccionDisparo = transform.rotation.eulerAngles;
             direccionDisparo.y = 90 - direccionDisparo.x;
+
+            float fuerza = fuerzaSlider.value;
+            tempRB.linearVelocity = direccionDisparo.normalized * fuerza;
+
             Vector3 direccionParticulas = new Vector3(-90 + direccionDisparo.x, 90, 0);
             GameObject Particulas = Instantiate(ParticulasDisparo, puntaCanon.transform.position, Quaternion.Euler(direccionParticulas), transform);
-            tempRB.linearVelocity = direccionDisparo.normalized * admin.VelocidadBolaPublico;
+            //tempRB.linearVelocity = direccionDisparo.normalized * admin.VelocidadBolaPublico;
+
             SourceDisparo.Play();
             disparos--;
             bloqueado = true;
